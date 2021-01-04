@@ -46,9 +46,6 @@ const cli = meow(helpMessage, {
 
 const { input: [mboxPath, attachmentPath = './'], flags: { pattern, directoryPerDomain, filenameAsSubject } } = cli;
 
-if (directoryPerDomain) console.error('DOMAIN');
-if (filenameAsSubject) console.error('FILENAME');
-
 if (!mboxPath) {
   console.error(`${chalk.bold.redBright('Error: The path to the mbox file cannot be empty!')} `);
   console.log(helpMessage);
