@@ -9,7 +9,8 @@ const pEvent = require('p-event');
 
 const writeAttachment = require('./writeAttachment');
 
-module.exports = async (mboxPath, attachmentPath, pattern = false, filenameAsSubject = false) => {
+module.exports = async (mboxPath, attachmentPath, pattern = false, filenameAsSubject = false,
+  directoryPerDomain = false) => {
   const stream = fs.createReadStream(mboxPath);
   const mbox = new Mbox(stream);
   const fileFilter = pattern ? new RegExp(pattern) : false;
@@ -53,7 +54,8 @@ module.exports = async (mboxPath, attachmentPath, pattern = false, filenameAsSub
       if (attachment.length === 0) {
         continue;
       }
-      attachment.forEach(writeAttachment(parsedMessage, attachmentPath, filenameAsSubject));
+      attachment.forEach(writeAttachment(parsedMessage, attachmentPath, filenameAsSubject,
+        directoryPerDomain));
       countFile += attachment.length;
       continue;
     }

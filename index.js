@@ -15,6 +15,7 @@ ${chalk.underline.green('Usage:')}
 
 ${chalk.underline.green('Options:')}
 ${chalk.gray('--pattern, -p')} Regex to filter attachments. Default: ''
+${chalk.gray('--directoryPerDomain, -d')} Create a directory for each mail domain. Example: amazon.de/
 ${chalk.gray('--filenameAsSubject, -s')} Create the attachment with the subject as the filename. Example: fromdomain_subject.zip
 ${chalk.gray('--help')} Prints this help text
 ${chalk.gray('--version')} Prints the current version
@@ -32,6 +33,10 @@ const cli = meow(helpMessage, {
       type: 'string',
       alias: 'p',
     },
+    directoryPerDomain: {
+      type: 'boolean',
+      alias: 'd',
+    },
     filenameAsSubject: {
       type: 'boolean',
       alias: 's',
@@ -39,7 +44,10 @@ const cli = meow(helpMessage, {
   },
 });
 
-const { input: [mboxPath, attachmentPath = './'], flags: { pattern, filenameAsSubject } } = cli;
+const { input: [mboxPath, attachmentPath = './'], flags: { pattern, directoryPerDomain, filenameAsSubject } } = cli;
+
+if (directoryPerDomain) console.error('DOMAIN');
+if (filenameAsSubject) console.error('FILENAME');
 
 if (!mboxPath) {
   console.error(`${chalk.bold.redBright('Error: The path to the mbox file cannot be empty!')} `);
@@ -47,5 +55,5 @@ if (!mboxPath) {
   process.exit(1);
 }
 
-mboxParser(mboxPath, attachmentPath, pattern, filenameAsSubject);
+mboxParser(mboxPath, attachmentPath, pattern, filenameAsSubject, directoryPerDomain);
 updateNotifier({ pkg }).notify();
